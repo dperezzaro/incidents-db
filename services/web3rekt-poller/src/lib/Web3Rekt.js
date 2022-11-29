@@ -4,6 +4,7 @@ const debug = require('debug')('lib:Web3Rekt');
 const qs = require('querystring');
 const pino = require('pino');
 const {
+  econnResetInterval,
   endpoints: { web3rekt },
   getLimit,
   getBatchInterval,
@@ -33,7 +34,6 @@ class Web3Rekt {
     if (data.length) {
       await onData(data);
     }
-    await sleep(getBatchInterval);
 
     // Check whether there is more data available for the given range
     debug('check', {
@@ -69,20 +69,18 @@ class Web3Rekt {
     do {
       try {
         data = (await this.get(`?${query}`)).map(Web3Rekt.parseIncident);
+        await sleep(getBatchInterval);
       } catch (err) {
-        switch (err.statusCode) {
-          case 429:
-            this.log.warn(
-              { err, sleepFor: rateLimitInterval },
-              'RATE_LIMIT_ERROR',
-            );
-            await sleep(rateLimitInterval);
-            break;
-          case 404:
-            data = [];
-            break;
-          default:
-            throw err;
+        if (err.code === 'ECONNRESET') {
+          this.log.warn('ECONNRESET_ERROR');
+          await sleep(econnResetInterval);
+        } else if (err.statusCode === 429) {
+          this.log.warn('RATE_LIMIT_ERROR');
+          await sleep(rateLimitInterval);
+        } else if (err.statusCode === 404) {
+          data = [];
+        } else {
+          throw err;
         }
       }
     } while (!data);

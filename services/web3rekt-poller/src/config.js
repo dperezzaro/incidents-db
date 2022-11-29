@@ -1,4 +1,7 @@
 const config = {
+  // Time to wait after an ECONNRESET error before attempting next fetch
+  econnResetInterval: 1000 * 5,
+
   endpoints: {
     incidents: process.env.WEB3REKT_POLLER_INCIDENTS_ENDPOINT
       || 'http://localhost:3000',
@@ -10,7 +13,7 @@ const config = {
   getLimit: 20,
 
   // Time to wait before next fetching next batch of incidents
-  getBatchInterval: 1000 * 5,
+  getBatchInterval: 1000 * 2,
 
   // First incident day, we need this as in the current's api implementation there
   // are no options to paginate the results
