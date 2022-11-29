@@ -2,23 +2,23 @@ const string = { type: 'string', minLength: 1 };
 
 const incident = {
   type: 'object',
-  required: [
+  /* required: [
     'id',
     'entity',
     'date',
     'loss',
-    'currency',
+    currency',
     'type',
     'platform',
     'major_method',
     'extended_method',
     'category',
-  ],
+  ], */
   properties: {
     id: string,
     entity: string,
     date: { type: 'number', minimum: 1 },
-    loss: { type: 'number', minimum: 0 },
+    loss: { type: 'number' },
     currency: string,
     type: string,
     platform: string,
