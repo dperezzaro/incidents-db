@@ -1,0 +1,57 @@
+version: '2'
+
+networks:
+  net: null
+
+services:
+
+  incidents:
+    image: incidents-db/incidents
+    build: services/incidents
+    #command: npx nodemon
+    command: npm start
+    depends_on:
+      - mongo
+    environment:
+      - DEBUG=main,lib:*
+      - INCIDENTS_MONGO_URI=mongodb://mongo:27017/incidents
+      - INCIDENTS_MONGO_COLLECTION=incidents
+    networks:
+      - net
+    ports:
+      - '3000:3000'
+    working_dir: /home/node/service
+    volumes:
+      - ./services/incidents:/home/node/service
+
+  web3rekt-poller:
+    image: incidents-db/web3rekt-poller
+    build: services/web3rekt-poller
+    #command: npx nodemon
+    command: npm start
+    depends_on:
+      - incidents
+    environment:
+      - DEBUG=main,lib:*
+      - WEB3REKT_POLLER_INITIAL_DELAY=10
+      - WEB3REKT_POLLER_INTERVAL=3600
+      - WEB3REKT_POLLER_INCIDENTS_ENDPOINT=http://incidents:3000
+      - WEB3REKT_POLLER_WEB3REKT_ENDPOINT=https://www.web3rekt.com/_functions/entitydetailsbasic
+    networks:
+      - net
+    working_dir: /home/node/service
+    volumes:
+      - ./services/web3rekt-poller:/home/node/service
+
+  mongo:
+    image: mongo:latest
+    command: '--nojournal --wiredTigerDirectoryForIndexes'
+    networks:
+      - net
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-db:/data/db
+  
+volumes:
+  mongo-db: null
