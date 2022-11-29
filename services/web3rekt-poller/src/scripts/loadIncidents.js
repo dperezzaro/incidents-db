@@ -14,7 +14,10 @@ const run = async () => {
   await web3Rekt.getIncidents({
     start: Math.round(new Date(startDate || '2011-06-01') / 1000),
     end: Math.round((endDate ? new Date(endDate) : Date.now()) / 1000),
-    onData: async (data) => post('/bulk', data),
+    onData: async (data) => {
+      const res = await post('/bulk', data);
+      debug('post:', res);
+    },
   });
   debug('end');
 };

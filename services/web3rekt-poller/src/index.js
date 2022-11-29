@@ -33,7 +33,10 @@ const run = async () => {
       await web3Rekt.getIncidents({
         start: date || firstDate,
         end: Math.round(Date.now() / 1000),
-        onData: async (data) => post('/bulk', data),
+        onData: async (data) => {
+          const res = await post('/bulk', data);
+          debug('post:', res);
+        },
       });
     } catch (err) {
       console.error('WARNING', err); // eslint-disable-line
