@@ -1,0 +1,32 @@
+{
+  "name": "incidents",
+  "version": "1.0.0",
+  "description": "Incidents CRUD service",
+  "main": "src/index.js",
+  "repository": "TODO",
+  "author": "@dperezzaro",
+  "license": "MIT",
+  "scripts": {
+    "lint": "npx eslint src",
+    "pretest": "npm run lint",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "debug": "^4.3.4",
+    "fastify": "^4.10.2",
+    "mongodb": "^4.12.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.20"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "es6": true,
+      "node": true
+    }
+  }
+}
