@@ -1,0 +1,33 @@
+{
+  "name": "web3rekt-poller",
+  "version": "1.0.0",
+  "description": "Polls web3rekt incidents API",
+  "repository": "TODO",
+  "author": "@dperezzaro",
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "npx eslint src",
+    "pretest": "npm run lint",
+    "start": "node src/index.js",
+    "load": "node src/scripts/loadIncidents.js"
+  },
+  "dependencies": {
+    "bent": "^7.3.12",
+    "debug": "^4.3.4",
+    "pino": "^8.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.20"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "es6": true,
+      "node": true
+    }
+  }
+}
