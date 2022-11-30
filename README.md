@@ -48,3 +48,64 @@ Optionally you can pass a start and/or end date
 ```
 docker-compose run web3rekt-poller npm run load -- 2011-06-01 2012-01-01
 ```
+
+## Request examples
+Things to consider:
+- All results are paginated, format:
+```
+{
+  total(number): total number of documents that match the criteria
+  data(Array<Object>): documents
+  next(string|null): query string that will fetch the next set of results
+}
+```
+- By default the page limit is 20 documents
+- All dates in a document are unix timestamps
+- Not all documents contain the same fields
+
+Get newest report date
+```
+curl "localhost:3000?limit=1&order=date|-1"
+```
+
+Get oldest report date
+```
+curl "localhost:3000?limit=1&order=date|1"
+```
+
+Get reports by matching field
+```
+curl "localhost:3000?platform=Bitcoin"
+```
+
+Get reports by several matching fields, check that you can use regexes to match values as well
+```
+curl "localhost:3000?platform=Bitcoin&major_method=/compromised/i"
+```
+
+Get reports by field comparison
+```
+curl "localhost:3000?loss=gt|10000"
+curl "localhost:3000?date=lt|1338508800"
+```
+
+Get reports by field comparison range
+```
+curl "localhost:3000?loss=between|100000,200000"
+curl "localhost:3000?date=between|1338508800,1343779200"
+```
+
+Get reports that contain a specific field
+```
+curl "localhost:3000?category=exists|true"
+```
+
+You can filter which fields to be returned
+```
+curl "localhost:3000?fields=_id,platform,currency,loss"
+```
+
+And you can combine all of the above
+```
+curl "localhost:3000?platform=Bitcoin&major_method=/compromised/i&loss=gt|200000&fields=major_method,loss"
+```
