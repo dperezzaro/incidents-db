@@ -24,16 +24,8 @@ There are 2 possible methods of storing an initial sample of incidents in the mo
 #### 1. Import sample database
 This repo contains a sample of all incidents from 2011-06-01 till 2022-11-29, it can be imported directly into mongo
 
-First start the mongo service:
-
 ```
-docker-compose up -d mongo
-```
-
-Then import the documents:
-
-```
-mongoimport --db=incidents --collection=incidents --file=data/incidents.json
+docker-compose run -v $(pwd)/data:/home/data -w /home/data mongo mongoimport --host=mongo --db=incidents --collection=incidents --file=incidents.json --jsonArray
 ```
 
 #### 2. Use load script
